@@ -4,40 +4,50 @@ import os
 import glob
 
 
-def RenameFiles(path):
+def RenameFiles(path, flag):
+    time_file=[] 
     i = 1
     #path = "F:\\f"
     file_name_collection = os.listdir(path)
     capacity = len(file_name_collection)
-    ws = 1
+    ws = 0
     while(capacity >= 10):
         capacity = capacity/10;
         ws = ws+1;
-    print ws
     for file in os.listdir(path):
         if os.path.isfile(os.path.join(path,file))==True:
-            j = file.rindex('.')#get the dot in order to parse the file type name
-            length = len(file)
-            if file[j+1:length]=='py':
-                continue
-            ii=i
-            while(ii >= 10):
-                ii = ii/10;
-                ws = ws-1;#iè¿›ä½åç”Ÿæˆæ­£ç¡®çš„å‰ç½®0çš„ä¸ªæ•°
-            newname = '0'*ws + "%i"%i +'.' + file[j+1:length]
-            i = i+1
-            try:
-                os.chdir(path)
-                os.rename(file, newname)
-                print 'é‡å‘½å ' + file + ' to ' + newname + ' æˆåŠŸ'
-            except:
-                print 'é‡å‘½å ' + file + ' to ' + newname + ' å¤±è´¥'
+            timeTemp = os.path.getmtime(file)
+            time_file.append([timeTemp, file])
+    if flag:
+        time_file.sort()
+    for file in time_file:
+        filename = file[1]
+        j = filename.rindex('.')#get the dot in order to parse the file type name
+        length = len(filename)
+        if filename[j+1:length]=='py':
+            continue
+        ii=i
+        while(ii >= 10):
+            ii = ii/10;
+            ws = ws-1;#i½øÎ»ºóÉú³ÉÕıÈ·µÄÇ°ÖÃ0µÄ¸öÊı
+        newname = '0'*ws + "%i"%i +'.' + filename[j+1:length]
+        i = i+1
+        try:
+            os.chdir(path)
+            os.rename(file[1], newname)
+            print 'ÖØÃüÃû ' + file[1] + ' to ' + newname + ' ³É¹¦'
+        except:
+            print 'ÖØÃüÃû ' + file[1] + ' to ' + newname + ' Ê§°Ü'
+
 
 def main(argv):
+    gc = raw_input("sort by time? y or n?")
+    flag = False
     fpath = os.path.abspath(os.path.dirname(__file__))
-    #RenameFiles(path)
+    if gc == 'y':
+        flag = True
     print fpath
-    RenameFiles(fpath)
+    RenameFiles(fpath, flag)
 
 if __name__ == '__main__':
     main(sys.argv)
