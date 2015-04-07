@@ -10,7 +10,7 @@ def RenameFiles(path, flag):
     #path = "F:\\f"
     file_name_collection = os.listdir(path)
     capacity = len(file_name_collection)
-    ws = 0
+    ws = 1
     while(capacity >= 10):
         capacity = capacity/10;
         ws = ws+1;
@@ -27,10 +27,11 @@ def RenameFiles(path, flag):
         if filename[j+1:length]=='py':
             continue
         ii=i
+        temp_ws = ws
         while(ii >= 10):
             ii = ii/10;
-            ws = ws-1;#i进位后生成正确的前置0的个数
-        newname = '0'*ws + "%i"%i +'.' + filename[j+1:length]
+            temp_ws = temp_ws-1;#i进位后生成正确的前置0的个数
+        newname = '0'*temp_ws + "%i"%i +'.' + filename[j+1:length]
         i = i+1
         try:
             os.chdir(path)
@@ -52,6 +53,3 @@ def main(argv):
 if __name__ == '__main__':
     main(sys.argv)
     raw_input()
-
-
-
